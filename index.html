@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -20,20 +21,18 @@
 <body>
     <div class="container-fluid">
         <div class="row" style="height: 100vh;">
-            <div class="fileZone col-md-2">
-                <div style="width: 100%; text-align: center;">Ecris.</div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <button id="toggleUIlist" onclick="toggleUi()"><img src="assets/subject-24px.svg"></button>
+            <div id="filezonee" class="fileZone col">
+                <span id="noteContainer"></span>
+                <input type="text" placeholder="Nouvelle note..." id="newNote" >
+                <!-- <div style="width: 100%; text-align: center;">Ecris.</div> -->
             </div>
-            <div class="textZone col-md-10">
-                <div class="activeNote" contenteditable="true"></div>
+            <div class="textZone col">
+                <div id="activeNote" contenteditable="true"></div>
             </div>
         </div>
     </div>
-
+    <script src="ecr.js"></script>
 </body>
-
-</html>
 
 </html>
