@@ -1,3 +1,8 @@
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+  
+
 var notes = {};
 
 if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes") == " ") {
