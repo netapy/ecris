@@ -20,14 +20,15 @@
 
 <body>
     <div class="container-fluid">
-        <div class="row" style="height: 100vh;">
-            <button id="toggleUIlist" onclick="toggleUi()"><img src="assets/subject-24px.svg"></button>
-            <div id="filezonee" class="fileZone col">
+        <div class="row">
+            <button id="toggleUIlist" onclick="toggleUi()"><img class="iconToggle" src="assets/subject-24px.svg"></button>
+            <div id="filezonee" class="fileZone col-lg-3 col-md-4 col-s-12">
                 <span id="noteContainer"></span>
-                <input type="text" placeholder="Nouvelle note..." id="newNote" >
+                <input type="text" placeholder="> Nouvelle note..." id="newNote"
+                    onkeypress="return /[a-z]/i.test(event.key)">
                 <!-- <div style="width: 100%; text-align: center;">Ecris.</div> -->
             </div>
-            <div class="textZone col">
+            <div class="textZone col-lg-9 col-md-8 col-s-12">
                 <div id="activeNote" contenteditable="true"></div>
             </div>
         </div>

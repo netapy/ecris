@@ -1,14 +1,15 @@
-let notes = {
-    "Ma première note": "<div>Hihii voila une note okk <br>test test</div>",
-    "iuiji": "<div>une autre <br>:) :) :) :)</div>",
-    "Une to-do": "<div>azjfkbazuogauogaoegoaenognaognoeagazjfkbazuogauogaoegoaenognaognoeagazjfkbazuogauogaoegoaenognaognoeag</div>"
-};
-notes = JSON.parse(localStorage.getItem("lesNotes"))
+var notes = {};
+
+if (localStorage.getItem("lesNotes") === null) {
+    console.log("Pas de données à charger.")
+} else {
+    notes = JSON.parse(localStorage.getItem("lesNotes"))
+}
+
 let uiHidden = false;
 let activeNote;
 
 const saveToMemory = () => localStorage.setItem("lesNotes", JSON.stringify(notes))
-
 
 const updateLists = () => {
     let t = document.querySelector("#noteContainer");
@@ -33,7 +34,7 @@ const loadNote = (e) => {
         document.querySelectorAll('.uneFeuille')[i].style.color = "black";
     }
     document.querySelector('#activeNote').innerHTML = notes[e.id];
-    e.style.color = "#FF8D7E";
+    e.style.color = "#5770BE";
     activeNote = e.id;
 }
 
@@ -46,11 +47,10 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
     saveToMemory();
 })
 
-document.querySelector("#newNote").addEventListener('keydown', event => {
+document.querySelector("#newNote").addEventListener('keyup', event => {
     if (event.key == "Enter") {
         let valeurNouvelleNote = document.querySelector("#newNote").value
-        if (valeurNouvelleNote)
-            notes[valeurNouvelleNote] = " ";
+        notes[valeurNouvelleNote] = " ";
         updateLists();
         loadNote(document.querySelector("#" + valeurNouvelleNote));
         document.querySelector("#newNote").value = "";
