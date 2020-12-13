@@ -1,6 +1,6 @@
 var notes = {};
 
-if (localStorage.getItem("lesNotes") === null) {
+if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes") == " ") {
     console.log("Pas de données à charger.")
 } else {
     notes = JSON.parse(localStorage.getItem("lesNotes"))
@@ -8,6 +8,7 @@ if (localStorage.getItem("lesNotes") === null) {
 
 let uiHidden = false;
 let activeNote;
+let lastKeyPressed;
 
 const saveToMemory = () => localStorage.setItem("lesNotes", JSON.stringify(notes))
 
@@ -36,6 +37,7 @@ const loadNote = (e) => {
     document.querySelector('#activeNote').innerHTML = notes[e.id];
     e.style.color = "#5770BE";
     activeNote = e.id;
+    document.querySelector("#activeNote").setAttribute("contenteditable", true)
 }
 
 const updateNote = (e) => {
@@ -43,13 +45,20 @@ const updateNote = (e) => {
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-    notes[activeNote] = document.querySelector("#activeNote").innerHTML
+    if (lastKeyPressed == "&" && event.key == "Enter") {
+        let txtAvtChangement = document.querySelector("#activeNote").innerHTML;
+        document.querySelector("#activeNote").innerHTML = txtAvtChangement.replace("Je veux supprimer cette note.", "<button contenteditable='false'>Supprimer la note.</button>")
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+    }
+    lastKeyPressed = event.key;
+    notes[activeNote] = document.querySelector("#activeNote").innerHTML;
     saveToMemory();
 })
 
 document.querySelector("#newNote").addEventListener('keyup', event => {
-    if (event.key == "Enter") {
-        let valeurNouvelleNote = document.querySelector("#newNote").value
+    let valeurNouvelleNote = document.querySelector("#newNote").value
+    if (event.key == "Enter" && valeurNouvelleNote != "") {
         notes[valeurNouvelleNote] = " ";
         updateLists();
         loadNote(document.querySelector("#" + valeurNouvelleNote));
@@ -57,8 +66,5 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
         saveToMemory();
     }
 })
-
-
-
 
 updateLists();

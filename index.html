@@ -21,15 +21,18 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <button id="toggleUIlist" onclick="toggleUi()"><img class="iconToggle" src="assets/subject-24px.svg"></button>
+            <button id="toggleUIlist" onclick="toggleUi()"><img class="iconToggle"
+                    src="assets/subject-24px.svg"></button>
             <div id="filezonee" class="fileZone col-lg-3 col-md-4 col-s-12">
+                <button id="toggleUIlist" onclick="swal('Instructions du power-user')" style="left: 45px;transform: scale(.96);"><img
+                        class="iconParam" src="assets/edit-24px.svg"></button>
                 <span id="noteContainer"></span>
-                <input type="text" placeholder="> Nouvelle note..." id="newNote"
-                    onkeypress="return /[a-z]/i.test(event.key)">
+                <input type="text" placeholder="+ Nouvelle note..." id="newNote"
+                    onkeypress="return /[a-z]/i.test(event.key)" maxlength="14">
                 <!-- <div style="width: 100%; text-align: center;">Ecris.</div> -->
             </div>
             <div class="textZone col-lg-9 col-md-8 col-s-12">
-                <div id="activeNote" contenteditable="true"></div>
+                <div id="activeNote"></div>
             </div>
         </div>
     </div>
