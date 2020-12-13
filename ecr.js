@@ -1,7 +1,6 @@
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
-  }
-  
+}
 
 var notes = {};
 
@@ -16,6 +15,19 @@ let activeNote;
 let lastKeyPressed;
 
 const saveToMemory = () => localStorage.setItem("lesNotes", JSON.stringify(notes))
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
 
 const updateLists = () => {
     let t = document.querySelector("#noteContainer");
@@ -49,10 +61,39 @@ const updateNote = (e) => {
     notes[e] = document.querySelector('#activeNote').innerHTML;
 }
 
+const supprLaNote = () => {
+    delete notes[activeNote];
+    saveToMemory();
+    updateLists();
+    try {
+        loadNote(document.querySelector(".uneFeuille"));
+    } catch (e) {
+        document.querySelector("#activeNote").innerHTML = '';
+        document.querySelector("#activeNote").setAttribute("contenteditable", false)
+    }
+}
+
+const importerNotes = (e) => {
+    var reader = new FileReader();
+    reader.onload = (event) => {
+        notes = JSON.parse(event.target.result);
+        saveToMemory();
+        updateLists();
+    }
+    reader.readAsText(e)
+}
+
+let dictReplace = {
+    "Suppr la note.": "<button class='btn-primary' contenteditable='false' onclick='supprLaNote()'>Supprimer la note.</button>",
+    "[]": "<input type='checkbox'>"
+}
+
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-    if (lastKeyPressed == "&" && event.key == "Enter") {
+    if (event.key == "Enter") {
         let txtAvtChangement = document.querySelector("#activeNote").innerHTML;
-        document.querySelector("#activeNote").innerHTML = txtAvtChangement.replace("Je veux supprimer cette note.", "<button contenteditable='false'>Supprimer la note.</button>")
+        for (expr in dictReplace) {
+            document.querySelector("#activeNote").innerHTML = txtAvtChangement.replaceAll(String(expr), dictReplace[String(expr)]);
+        }
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
     }
@@ -64,11 +105,32 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
 document.querySelector("#newNote").addEventListener('keyup', event => {
     let valeurNouvelleNote = document.querySelector("#newNote").value
     if (event.key == "Enter" && valeurNouvelleNote != "") {
-        notes[valeurNouvelleNote] = " ";
-        updateLists();
-        loadNote(document.querySelector("#" + valeurNouvelleNote));
+        if (["importer", "import"].includes(valeurNouvelleNote)) {
+            swal("Choisis ton fichier à importer.", {
+                    buttons: {
+                        cancel: "Annuler.",
+                        catch: {
+                            text: "Choisir fichier",
+                            value: "catch",
+                        }
+                    },
+                })
+                .then((value) => {
+                    switch (value) {
+                        case "catch":
+                            document.getElementById('file-input').click();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+        } else {
+            notes[valeurNouvelleNote] = " ";
+            updateLists();
+            loadNote(document.querySelector("#" + valeurNouvelleNote));
+            saveToMemory();
+        }
         document.querySelector("#newNote").value = "";
-        saveToMemory();
     }
 })
 
