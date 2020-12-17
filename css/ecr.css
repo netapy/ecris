@@ -40,6 +40,11 @@ body {
     padding: 60px 10px 0px 10px;
 }
 
+#activeNote > div {
+    line-height: normal;
+    margin-bottom: 10px;
+}
+
 .uneFeuille {
     padding: 5px;
     opacity: .8;

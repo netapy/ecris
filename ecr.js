@@ -12,7 +12,6 @@ if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes"
 
 let uiHidden = false;
 let activeNote;
-let lastKeyPressed;
 
 const saveToMemory = () => localStorage.setItem("lesNotes", JSON.stringify(notes))
 
@@ -85,19 +84,18 @@ const importerNotes = (e) => {
 
 let dictReplace = {
     "Suppr la note.": "<button class='btn-primary' contenteditable='false' onclick='supprLaNote()'>Supprimer la note.</button>",
-    "[]": "<input type='checkbox'>"
+    "()": "<input type='text'>"
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-    if (event.key == "Enter") {
-        let txtAvtChangement = document.querySelector("#activeNote").innerHTML;
+    if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
+        console.log("changement devrait avoir lieu !")
         for (expr in dictReplace) {
-            document.querySelector("#activeNote").innerHTML = txtAvtChangement.replaceAll(String(expr), dictReplace[String(expr)]);
+            document.getSelection().baseNode.parentNode.innerHTML = document.getSelection().baseNode.parentNode.innerHTML.replaceAll(String(expr), dictReplace[String(expr)]);
         }
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-    }
-    lastKeyPressed = event.key;
+        //document.execCommand('selectAll', false, null);
+        //document.getSelection().collapseToEnd();
+    };
     notes[activeNote] = document.querySelector("#activeNote").innerHTML;
     saveToMemory();
 })
