@@ -122,6 +122,7 @@ body {
     table-layout: fixed; 
     max-width: 100%;
     min-width: 50%;
+    position: relative;
 }
 
 .tableEcr th, td {
@@ -129,4 +130,24 @@ body {
     border-collapse: collapse;
     padding: 5px;
     word-break: break-all;
+}
+
+.newColbtn{
+    position: absolute;
+    cursor: pointer;
+    right: -20px;
+    top: 0px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.newRowbtn{
+    position: absolute;
+    cursor: pointer;
+    left: 0px;
+    bottom: -20px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    padding: 5px;
 }

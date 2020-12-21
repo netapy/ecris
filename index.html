@@ -31,11 +31,15 @@
                     style="left: 80px;transform: scale(.96);"><img class="iconParam"
                         src="assets/save_alt-24px.svg"></button>
                 <span id="noteContainer"></span>
-                <input type="text" placeholder="+ Nouvelle note..." id="newNote"
+                <input type="text" placeholder="+ Nouvelle note | import" id="newNote"
                     onkeypress="return /[a-z]/i.test(event.key)" maxlength="14">
             </div>
             <div class="textZone col-lg-9 col-md-8 col-s-12">
-                <div id="activeNote" data-text="Ecris..."></div>
+                <div id="activeNote" data-text="Ecris...">
+                    <div class="d-flex flex-column align-items-center justify-content-around" style="height: 85%;">
+                        <img src="assets/no_data.svg" style="width: 80%; max-width: 200px; opacity: .6;" onclick="document.querySelector('#newNote').focus()">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
