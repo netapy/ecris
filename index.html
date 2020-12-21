@@ -24,7 +24,7 @@
             <button class="toggleUIlist" onclick="toggleUi()"><img class="iconToggle"
                     src="assets/subject-24px.svg"></button>
             <div id="filezonee" class="fileZone col-lg-3 col-md-4 col-s-12">
-                <button class="toggleUIlist" onclick="swal('Instructions du power-user')"
+                <button class="toggleUIlist" onclick="swal(powerUserNote)"
                     style="left: 45px;transform: scale(.96);"><img class="iconParam"
                         src="assets/edit-24px.svg"></button>
                 <button class="toggleUIlist" onclick='download("mes_notes.txt",localStorage.getItem("lesNotes"));'
@@ -33,10 +33,9 @@
                 <span id="noteContainer"></span>
                 <input type="text" placeholder="+ Nouvelle note..." id="newNote"
                     onkeypress="return /[a-z]/i.test(event.key)" maxlength="14">
-                <!-- <div style="width: 100%; text-align: center;">Ecris.</div> -->
             </div>
             <div class="textZone col-lg-9 col-md-8 col-s-12">
-                <div id="activeNote"></div>
+                <div id="activeNote" data-text="Ecris..."></div>
             </div>
         </div>
     </div>

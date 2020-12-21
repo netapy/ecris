@@ -4,6 +4,8 @@ if ("serviceWorker" in navigator) {
 
 var notes = {};
 
+var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• Suppr la note. => Bouton pour supprimer la note définitivement."
+
 if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes") == " ") {
     console.log("Pas de données à charger.")
 } else {
@@ -100,10 +102,10 @@ const importerNotes = (e) => {
 }
 
 let dictReplace = {
-    "Suppr la note.": "<button class='btn-primary' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
+    "Suppr la note": "<button class='btnSuppr' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     "[]": "<input type='checkbox'>",
     "- ": "&#8226; ",
-    "Teuuch": "eg"
+    ".tableau": "<table class='tableEcr'><tr><th>Lastname</th><th>Age</th></tr><tr><td>Smith</td><td>50</td></tr><tr><td>Jackson</td><td>94</td></tr></table>"
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
@@ -111,14 +113,20 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         console.log("changement devrait avoir lieu !")
         let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
         for (expr in dictReplace) {
-            if (textAvant.indexOf(expr)) textAvant = textAvant.replace(expr, dictReplace[expr])
+            textAvant = textAvant.replace(expr, dictReplace[expr])
         }
         document.getSelection().baseNode.parentElement.innerHTML = textAvant;
         toContEditEnd(document.getSelection().baseNode);
     };
+
     notes[activeNote] = document.querySelector("#activeNote").innerHTML;
     saveToMemory();
-})
+});
+document.querySelector("#activeNote").addEventListener('keydown', event => {
+    if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
+    notes[activeNote] = document.querySelector("#activeNote").innerHTML;
+    saveToMemory();
+});
 
 document.querySelector("#newNote").addEventListener('keyup', event => {
     let valeurNouvelleNote = document.querySelector("#newNote").value
