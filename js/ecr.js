@@ -106,7 +106,7 @@ let dictReplace = {
     "Suppr la note": "<button class='btnSuppr' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     "[]": "<input type='checkbox'>",
     "- ": "&#8226; ",
-    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColbtn' contenteditable='false' onclick='newCol(this)'>+</div><div class='newRowbtn' contenteditable='false' onclick='newCol(this)'>+</div><tr><th>Lastname</th><th>Age</th></tr><tr><td>Smith</td><td>50</td></tr><tr><td>Jackson</td><td>94</td></tr></table></div>"
+    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColbtn' contenteditable='false' onclick='newRow(this)'>+</div><div class='newRowbtn' contenteditable='false' onclick='newCol(this)'>+</div><tr><th>Lastname</th><th>Age</th></tr><tr><td>Smith</td><td>50</td></tr><tr><td>Jackson</td><td>94</td></tr></table></div>"
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
@@ -152,7 +152,7 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
                     }
                 });
         } else {
-            notes[valeurNouvelleNote] = " ";
+            notes[valeurNouvelleNote] = "<div><br></div>";
             updateLists();
             loadNote(document.querySelector("#" + valeurNouvelleNote));
             saveToMemory();
@@ -163,7 +163,3 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
 
 updateLists();
 
-
-const newCol = (elem) => {
-    console.log(elem)
-}
