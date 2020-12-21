@@ -28,6 +28,23 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
+function toContEditEnd(contentEditableElement) {
+    let range, selection;
+    if (document.createRange) {
+        range = document.createRange();
+        range.selectNodeContents(contentEditableElement);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } else if (document.selection) {
+        range = document.body.createTextRange();
+        range.moveToElementText(contentEditableElement);
+        range.collapse(false);
+        range.select();
+    }
+}
+
 const updateLists = () => {
     let t = document.querySelector("#noteContainer");
     t.innerHTML = "";
@@ -83,18 +100,21 @@ const importerNotes = (e) => {
 }
 
 let dictReplace = {
-    "Suppr la note.": "<button class='btn-primary' contenteditable='false' onclick='supprLaNote()'>Supprimer la note.</button>",
-    "()": "<input type='text'>"
+    "Suppr la note.": "<button class='btn-primary' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
+    "[]": "<input type='checkbox'>",
+    "- ": "&#8226; ",
+    "Teuuch": "eg"
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
         console.log("changement devrait avoir lieu !")
+        let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
         for (expr in dictReplace) {
-            document.getSelection().baseNode.parentNode.innerHTML = document.getSelection().baseNode.parentNode.innerHTML.replaceAll(String(expr), dictReplace[String(expr)]);
+            if (textAvant.indexOf(expr)) textAvant = textAvant.replace(expr, dictReplace[expr])
         }
-        //document.execCommand('selectAll', false, null);
-        //document.getSelection().collapseToEnd();
+        document.getSelection().baseNode.parentElement.innerHTML = textAvant;
+        toContEditEnd(document.getSelection().baseNode);
     };
     notes[activeNote] = document.querySelector("#activeNote").innerHTML;
     saveToMemory();
