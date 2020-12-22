@@ -3,6 +3,7 @@ if ("serviceWorker" in navigator) {
 }
 
 var notes = {};
+var notesList = [];
 
 var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• Suppr la note. => Bouton pour supprimer la note définitivement."
 
@@ -12,21 +13,42 @@ if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes"
     notes = JSON.parse(localStorage.getItem("lesNotes"))
 }
 
+const dbPromise = idb.openDB('ecris-store', 1, {
+    upgrade(db) {
+        db.createObjectStore('ecris');
+    },
+});
+
+const idbEcris = {
+    async get(key) {
+        return (await dbPromise).get('ecris', key);
+    },
+    async set(key, val) {
+        return (await dbPromise).put('ecris', val, key);
+    },
+    async delete(key) {
+        return (await dbPromise).delete('ecris', key);
+    },
+    async clear() {
+        return (await dbPromise).clear('ecris');
+    },
+    async keys() {
+        return (await dbPromise).getAllKeys('ecris');
+    },
+};
+
 let uiHidden = false;
 let activeNote;
 
-const saveToMemory = () => localStorage.setItem("lesNotes", JSON.stringify(notes))
+const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector("#activeNote").innerHTML)
 
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
-
     element.style.display = 'none';
     document.body.appendChild(element);
-
     element.click();
-
     document.body.removeChild(element);
 }
 
@@ -48,11 +70,17 @@ function toContEditEnd(contentEditableElement) {
 }
 
 const updateLists = () => {
-    let t = document.querySelector("#noteContainer");
-    t.innerHTML = "";
-    for (var i in notes) {
-        t.insertAdjacentHTML("beforeend", "<div id='" + i + "' class='uneFeuille' onClick='loadNote(this)'> > " + i + " </div>")
-    }
+    return new Promise(resolve => {
+        let t = document.querySelector("#noteContainer");
+        t.innerHTML = "";
+        idbEcris.keys().then((zeKeys) => {
+            for (let i in zeKeys) {
+                t.insertAdjacentHTML("beforeend", "<div id='" + zeKeys[i] + "' class='uneFeuille' onClick='loadNote(this)'> > " + zeKeys[i] + " </div>")
+            }
+        }).then(() => {
+            resolve("ok");
+        })
+    })
 }
 
 const toggleUi = () => {
@@ -69,11 +97,14 @@ const loadNote = (e) => {
     for (var i = 0; i < document.querySelectorAll('.uneFeuille').length; i++) {
         document.querySelectorAll('.uneFeuille')[i].style.color = "black";
     }
-    document.querySelector('#activeNote').innerHTML = notes[e.id];
-    e.style.color = "#5770BE";
-    activeNote = e.id;
-    document.querySelector("#activeNote").setAttribute("contenteditable", true)
-    document.querySelector('#btnNvElem').style.display = 'block';
+    idbEcris.get(e.id).then((res) => {
+        document.querySelector('#activeNote').innerHTML = res;
+        e.style.color = "#5770BE";
+        activeNote = e.id;
+        document.querySelector("#activeNote").setAttribute("contenteditable", true)
+        document.querySelector('#btnNvElem').style.display = 'block';
+        toContEditEnd(document.querySelector("#activeNote").querySelector('div'));
+    })
 }
 
 const updateNote = (e) => {
@@ -81,22 +112,22 @@ const updateNote = (e) => {
 }
 
 const supprLaNote = () => {
-    delete notes[activeNote];
-    saveToMemory();
-    updateLists();
-    try {
-        loadNote(document.querySelector(".uneFeuille"));
-    } catch (e) {
-        document.querySelector("#activeNote").innerHTML = '';
-        document.querySelector("#activeNote").setAttribute("contenteditable", false)
-    }
+    idbEcris.delete(activeNote).then((e) => {
+        updateLists();
+        try {
+            loadNote(document.querySelector(".uneFeuille"));
+        } catch (e) {
+            document.querySelector("#activeNote").innerHTML = '';
+            document.querySelector("#activeNote").setAttribute("contenteditable", false)
+        }
+    })
 }
 
 const importerNotes = (e) => {
     var reader = new FileReader();
     reader.onload = (event) => {
         notes = JSON.parse(event.target.result);
-        saveToMemory();
+        NoteToMemory();
         updateLists();
     }
     reader.readAsText(e)
@@ -111,7 +142,6 @@ let dictReplace = {
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
-        console.log("changement devrait avoir lieu !")
         let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
         for (expr in dictReplace) {
             textAvant = textAvant.replace(expr, dictReplace[expr])
@@ -119,14 +149,15 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         document.getSelection().baseNode.parentElement.innerHTML = textAvant;
         toContEditEnd(document.getSelection().baseNode);
     };
-
     notes[activeNote] = document.querySelector("#activeNote").innerHTML;
-    saveToMemory();
+    NoteToMemory();
 });
+
 document.querySelector("#activeNote").addEventListener('keydown', event => {
     if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
+
     notes[activeNote] = document.querySelector("#activeNote").innerHTML;
-    saveToMemory();
+    NoteToMemory();
 });
 
 document.querySelector("#newNote").addEventListener('keyup', event => {
@@ -152,10 +183,12 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
                     }
                 });
         } else {
-            notes[valeurNouvelleNote] = "<div><br></div>";
-            updateLists();
-            loadNote(document.querySelector("#" + valeurNouvelleNote));
-            saveToMemory();
+            idbEcris.set(valeurNouvelleNote, '<div><br></div>').then(e => {
+                (async () => {
+                    await updateLists();
+                    loadNote(document.getElementById(valeurNouvelleNote));
+                })();
+            })
         }
         document.querySelector("#newNote").value = "";
     }
