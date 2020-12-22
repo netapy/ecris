@@ -2,16 +2,7 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
 }
 
-var notes = {};
-var notesList = [];
-
 var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• Suppr la note. => Bouton pour supprimer la note définitivement."
-
-if (localStorage.getItem("lesNotes") === null || localStorage.getItem("lesNotes") == " ") {
-    console.log("Pas de données à charger.")
-} else {
-    notes = JSON.parse(localStorage.getItem("lesNotes"))
-}
 
 const dbPromise = idb.openDB('ecris-store', 1, {
     upgrade(db) {
@@ -107,10 +98,6 @@ const loadNote = (e) => {
     })
 }
 
-const updateNote = (e) => {
-    notes[e] = document.querySelector('#activeNote').innerHTML;
-}
-
 const supprLaNote = () => {
     idbEcris.delete(activeNote).then((e) => {
         updateLists();
@@ -123,6 +110,7 @@ const supprLaNote = () => {
     })
 }
 
+//need 2 fix this
 const importerNotes = (e) => {
     var reader = new FileReader();
     reader.onload = (event) => {
