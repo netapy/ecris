@@ -40,7 +40,7 @@ const idbEcris = {
 let uiHidden = false;
 let activeNote;
 
-const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector("#activeNote").innerHTML)
+const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector("#activeNote").innerHTML);
 
 function download(filename, text) {
     var element = document.createElement('a');
@@ -140,6 +140,8 @@ let dictReplace = {
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr><th>Lastname</th><th>Age</th></tr><tr><td>Smith</td><td>50</td></tr><tr><td>Jackson</td><td>94</td></tr></table></div>"
 }
 
+let timeout = null;
+
 document.querySelector("#activeNote").addEventListener('keyup', event => {
     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
         let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
@@ -149,15 +151,18 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         document.getSelection().baseNode.parentElement.innerHTML = textAvant;
         toContEditEnd(document.getSelection().baseNode);
     };
-    notes[activeNote] = document.querySelector("#activeNote").innerHTML;
-    NoteToMemory();
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+        NoteToMemory();
+    }, 1000);
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
     if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
-
-    notes[activeNote] = document.querySelector("#activeNote").innerHTML;
-    NoteToMemory();
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+        NoteToMemory();
+    }, 1000);
 });
 
 document.querySelector("#newNote").addEventListener('keyup', event => {
