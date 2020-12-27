@@ -125,7 +125,7 @@ let dictReplace = {
     "[]": "<input type='checkbox'>",
     "- ": "&#8226; ",
     ".suppr": "<button class='btnSuppr' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
-    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr><th>Lastname</th><th>Age</th></tr><tr><td>Smith</td><td>50</td></tr><tr><td>Jackson</td><td>94</td></tr></table></div>"
+    ".tableau": "<div style='position:relative; width:fit-content;' contenteditable='false'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Smith</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
 }
 
 let timeout = null;
