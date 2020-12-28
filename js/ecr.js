@@ -2,7 +2,7 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
 }
 
-var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• Suppr la note. => Bouton pour supprimer la note définitivement."
+var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• .suppr => Bouton pour supprimer la note définitivement."
 
 const dbPromise = idb.openDB('ecris-store', 1, {
     upgrade(db) {
@@ -110,22 +110,57 @@ const supprLaNote = () => {
     })
 }
 
-//need 2 fix this
+const ectCheckbox = (ee) => {
+    if (ee.checked) {
+        ee.nextSibling.style.opacity = '.5';
+        ee.nextSibling.style.textDecoration = 'line-through';
+        ee.setAttribute('checked', true);
+    } else {
+        ee.nextSibling.style.opacity = '1';
+        ee.nextSibling.style.textDecoration = 'none';
+        ee.setAttribute('checked', false);
+    }
+    NoteToMemory();
+}
+
 const importerNotes = (e) => {
     var reader = new FileReader();
     reader.onload = (event) => {
-        notes = JSON.parse(event.target.result);
-        NoteToMemory();
-        updateLists();
+        let notesImportees = JSON.parse(event.target.result);
+        let compteur = 0;
+        for (laNote in notesImportees) {
+            idbEcris.set(laNote, notesImportees[laNote]).then(() => {
+                compteur++;
+                if (compteur == Object.keys(notesImportees).length) updateLists()
+            });
+        }
     }
     reader.readAsText(e)
 }
 
+const exportNotes = () => {
+    let objectForExport = {};
+    idbEcris.keys().then((ee) => {
+        for (ie in ee) {
+            (async () => {
+                let indexObj = ee[ie];
+                let contenu = await idbEcris.get(indexObj).then((aa) => {
+                    return (aa);
+                });
+                objectForExport[indexObj] = contenu;
+                if (indexObj == ee.slice(-1)[0]) {
+                    download("mes_notes.txt", JSON.stringify(objectForExport));
+                }
+            })();
+        }
+    });
+};
+
 let dictReplace = {
-    "[]": "<input type='checkbox'>",
+    "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
-    ".suppr": "<button class='btnSuppr' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
-    ".tableau": "<div style='position:relative; width:fit-content;' contenteditable='false'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Smith</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
+    ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
+    ".tableau": "<div style='position:relative; width:fit-content;' contenteditable='false'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
 }
 
 let timeout = null;
@@ -176,7 +211,7 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
                     }
                 });
         } else {
-            idbEcris.set(valeurNouvelleNote, '<div><br></div>').then(e => {
+            idbEcris.set(valeurNouvelleNote, '<div class="drag-box"><br></div>').then(e => {
                 (async () => {
                     await updateLists();
                     loadNote(document.getElementById(valeurNouvelleNote));
