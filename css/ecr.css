@@ -147,6 +147,10 @@ td {
     min-width: 50px;
 }
 
+tbody tr:first-child{
+    font-weight: bold;
+}
+
 .newColRowbtn {
     position: absolute;
     cursor: pointer;
@@ -159,7 +163,7 @@ td {
     align-items: center;
 }
 
-.ecrCheckbox{
+.ecrCheckbox {
     padding: 3px;
     margin-right: 5px;
 }

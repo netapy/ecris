@@ -28,8 +28,9 @@ const idbEcris = {
     },
 };
 
-let uiHidden = false;
+let uiHidden = false
 let activeNote;
+let lastAction;
 
 const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector("#activeNote").innerHTML);
 
@@ -93,7 +94,7 @@ const loadNote = (e) => {
         e.style.color = "#5770BE";
         activeNote = e.id;
         document.querySelector("#activeNote").setAttribute("contenteditable", true)
-        document.querySelector('#btnNvElem').style.display = 'block';
+        //document.querySelector('#btnNvElem').style.display = 'block';
         toContEditEnd(document.querySelector("#activeNote").querySelector('div'));
     })
 }
@@ -108,19 +109,6 @@ const supprLaNote = () => {
             document.querySelector("#activeNote").setAttribute("contenteditable", false)
         }
     })
-}
-
-const ectCheckbox = (ee) => {
-    if (ee.checked) {
-        ee.nextSibling.style.opacity = '.5';
-        ee.nextSibling.style.textDecoration = 'line-through';
-        ee.setAttribute('checked', true);
-    } else {
-        ee.nextSibling.style.opacity = '1';
-        ee.nextSibling.style.textDecoration = 'none';
-        ee.setAttribute('checked', false);
-    }
-    NoteToMemory();
 }
 
 const importerNotes = (e) => {
@@ -160,7 +148,7 @@ let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
-    ".tableau": "<div style='position:relative; width:fit-content;' contenteditable='false'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
+    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
 }
 
 let timeout = null;
@@ -181,7 +169,7 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
-    if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
+    //if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
     clearTimeout(timeout);
     timeout = setTimeout(function () {
         NoteToMemory();
@@ -191,7 +179,7 @@ document.querySelector("#activeNote").addEventListener('keydown', event => {
 document.querySelector("#newNote").addEventListener('keyup', event => {
     let valeurNouvelleNote = document.querySelector("#newNote").value
     if (event.key == "Enter" && valeurNouvelleNote != "") {
-        if (["importer", "import"].includes(valeurNouvelleNote)) {
+        if (["importer", "import"].includes(valeurNouvelleNote.toLowerCase())) {
             swal("Choisis ton fichier à importer.", {
                     buttons: {
                         cancel: "Annuler.",
@@ -211,7 +199,7 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
                     }
                 });
         } else {
-            idbEcris.set(valeurNouvelleNote, '<div class="drag-box"><br></div>').then(e => {
+            idbEcris.set(valeurNouvelleNote, '<div><br></div>').then(e => {
                 (async () => {
                     await updateLists();
                     loadNote(document.getElementById(valeurNouvelleNote));

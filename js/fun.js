@@ -14,3 +14,17 @@ const newRow = (elem) => {
         newCell.setAttribute("contenteditable",true)
     }
 }
+
+const ectCheckbox = (ee) => {
+    if (ee.checked) {
+        ee.nextSibling.style.opacity = '.5';
+        ee.nextSibling.style.textDecoration = 'line-through';
+        ee.setAttribute('checked', true);
+    } else {
+        ee.nextSibling.style.opacity = '1';
+        ee.nextSibling.style.textDecoration = 'none';
+        ee.setAttribute('checked', false);
+    }
+    NoteToMemory();
+}
+
