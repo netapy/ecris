@@ -95,7 +95,6 @@ class Scribby {
         this.attrStrokeWidth = w;
     }
 
-
     //these are some utility functions
     getMousePosition(ev) {
         var rect = this.svgEl.getBoundingClientRect();

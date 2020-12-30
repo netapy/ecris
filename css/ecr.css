@@ -1,7 +1,8 @@
 html,
 body {
     font-family: 'Lexend Deca', sans-serif;
-    background-color: #fdfdfd
+    background-color: #fdfdfd;
+    overflow: hidden;
 }
 
 [contenteditable] {
@@ -24,6 +25,13 @@ body {
         inset -5px -5px 14px #ffffff;
 }
 
+.textZone {
+    margin: 0px auto;
+    min-height: 60vh;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
 @media(max-width: 767px) {
     .fileZone {
         height: fit-content;
@@ -31,12 +39,16 @@ body {
         overflow: scroll;
         overflow-x: hidden;
     }
+
+    .textZone {
+        height: fit-content;
+        max-height: 67vh;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
 }
 
-.textZone {
-    margin: 0px auto;
-    min-height: 60vh;
-}
+
 
 #activeNote {
     width: 100%;
@@ -156,11 +168,21 @@ tbody tr:first-child {
     cursor: pointer;
     background-color: whitesmoke;
     border-radius: 5px;
-    height: 20px;
-    width: 20px;
+    height: 24px;
+    width: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all .1s linear;
+    opacity: 0;
+}
+
+.tableEcr:hover ~.newColRowbtn{
+    opacity: 1;
+}
+
+.newColRowbtn:hover{
+    opacity: 1;
 }
 
 .ecrCheckbox {
@@ -170,14 +192,14 @@ tbody tr:first-child {
 
 .ecrDrawboard {
     background-color: transparent;
-    width:100%; 
-    height:400px;
+    width: 100%;
+    height: 400px;
 }
 
-.ecrDrawboard:hover{
+.ecrDrawboard:hover {
     background-color: #f8f5ef;
 }
 
 .ecrDrawboard path {
-    color: tomato;
+    stroke: #141414;
 }

@@ -148,8 +148,8 @@ let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
-    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>",
-    ".dessin": "<svg class='ecrDrawboard'/><button class='btn' onclick='document.querySelector(\".ecrDrawboard\").lastElementChild.remove()'>Retour</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\".ecrDrawboard\"));'/> "
+    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
+    ".dessin": "<svg class='ecrDrawboard' width='100%' height='400px' preserveAspectRatio='xMinYMin meet' /><button contenteditable='false' class='btn btn-secondary' onclick='document.querySelector(\".ecrDrawboard\").lastElementChild.remove()'>Retour</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\".ecrDrawboard\"));'/> "
 }
 
 let timeout = null;
