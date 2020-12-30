@@ -148,10 +148,17 @@ let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
-    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>"
+    ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-20px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-20px;'>+</div><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table></div><div><br></div>",
+    ".dessin": "<svg class='ecrDrawboard'/><button class='btn' onclick='document.querySelector(\".ecrDrawboard\").lastElementChild.remove()'>Retour</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\".ecrDrawboard\"));'/> "
 }
 
 let timeout = null;
+const SlowNoteToMem = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+        NoteToMemory();
+    }, 1000);
+}
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
@@ -162,14 +169,17 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         document.getSelection().baseNode.parentElement.innerHTML = textAvant;
         toContEditEnd(document.getSelection().baseNode);
     };
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-        NoteToMemory();
-    }, 1000);
+    SlowNoteToMem();
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
     //if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
+    if (["•"].includes(document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0]) && event.keyCode == 13) {
+        console.log('repetition bullet.')
+        event.preventDefault();
+        document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0] + "&nbsp;</div>");
+        toContEditEnd(document.getSelection().baseNode.parentElement.nextSibling);
+    }
     clearTimeout(timeout);
     timeout = setTimeout(function () {
         NoteToMemory();
