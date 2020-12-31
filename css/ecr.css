@@ -116,6 +116,7 @@ body {
     margin-bottom: 6px;
     padding: 5px;
     transition: all .2s cubic-bezier(.25, .8, .25, 1);
+    position: relative;
 }
 
 #activeNote>div:hover {
@@ -177,11 +178,11 @@ tbody tr:first-child {
     opacity: 0;
 }
 
-.tableEcr:hover ~.newColRowbtn{
+.tableEcr:hover~.newColRowbtn {
     opacity: 1;
 }
 
-.newColRowbtn:hover{
+.newColRowbtn:hover {
     opacity: 1;
 }
 
@@ -197,9 +198,34 @@ tbody tr:first-child {
 }
 
 .ecrDrawboard:hover {
-    background-color: #f8f5ef;
+    background-color: #fffbf4;
+}
+
+.ecrDrawboard:hover~.btnAnnuler {
+    opacity: 1;
+}
+
+.btnAnnuler:hover {
+    opacity: 1;
 }
 
 .ecrDrawboard path {
     stroke: #141414;
+}
+
+.btnAnnuler {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    cursor: pointer;
+    border-width: 0px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .1s linear;
+    opacity: 0;
 }
