@@ -113,6 +113,14 @@ const supprLaNote = () => {
     })
 }
 
+const toutSuppr = () => {
+    idbEcris.clear().then(() => {
+        updateLists();
+        document.querySelector("#activeNote").innerHTML = '';
+        document.querySelector("#activeNote").setAttribute("contenteditable", false)
+    })
+}
+
 const importerNotes = (e) => {
     var reader = new FileReader();
     reader.onload = (event) => {
@@ -150,6 +158,7 @@ let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
+    ".toutsuppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='toutSuppr()'> Supprimer toutes données. </button>",
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
     ".dessin": "<svg class='ecrDrawboard' width='100%' height='400px' preserveAspectRatio='xMinYMin meet' onclick='SlowNoteToMem();' /><button contenteditable='false' class='btnAnnuler' onclick='document.querySelector(\".ecrDrawboard\").lastElementChild.remove();SlowNoteToMem();'>↺</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\".ecrDrawboard\"));'/> "
 }
@@ -171,21 +180,21 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         document.getSelection().baseNode.parentElement.innerHTML = textAvant;
         toContEditEnd(document.getSelection().baseNode);
     };
+    if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
+        document.querySelector("#activeNote").innerHTML = "<div><br></div>";
+    }
     SlowNoteToMem();
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
     //if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
-    if (["•"].includes(document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0]) && event.keyCode == 13) {
-        console.log('repetition bullet.')
+    if (["•", "-"].includes(document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0]) && event.keyCode == 13) {
         event.preventDefault();
         document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0] + "&nbsp;</div>");
         toContEditEnd(document.getSelection().baseNode.parentElement.nextSibling);
     }
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-        NoteToMemory();
-    }, 1000);
+
+    SlowNoteToMem();
 });
 
 document.querySelector("#newNote").addEventListener('keyup', event => {
