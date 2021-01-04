@@ -2,8 +2,6 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
 }
 
-var powerUserNote = "Notes du power-user \n• [] => Checkbox \n• .suppr => Bouton pour supprimer la note définitivement."
-
 const dbPromise = idb.openDB('ecris-store', 1, {
     upgrade(db) {
         db.createObjectStore('ecris');
@@ -28,7 +26,7 @@ const idbEcris = {
     },
 };
 
-let uiHidden = false
+let uiHidden = false;
 let activeNote;
 let lastAction;
 
@@ -42,7 +40,7 @@ function download(filename, text) {
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-}
+};
 
 function toContEditEnd(contentEditableElement) {
     let range, selection;
@@ -59,7 +57,7 @@ function toContEditEnd(contentEditableElement) {
         range.collapse(false);
         range.select();
     }
-}
+};
 
 const updateLists = () => {
     return new Promise(resolve => {
@@ -73,7 +71,7 @@ const updateLists = () => {
             resolve("ok");
         })
     })
-}
+};
 
 const toggleUi = () => {
     if (!uiHidden) {
@@ -85,7 +83,7 @@ const toggleUi = () => {
         document.querySelector(".textZone").style = '';
         uiHidden = false;
     }
-}
+};
 
 const loadNote = (e) => {
     for (var i = 0; i < document.querySelectorAll('.uneFeuille').length; i++) {
@@ -99,6 +97,14 @@ const loadNote = (e) => {
         //document.querySelector('#btnNvElem').style.display = 'block';
         toContEditEnd(document.querySelector("#activeNote").querySelector('div'));
     })
+};
+
+const uniquedivid = () => {
+    if (localStorage.getItem('uniqueID') == null) localStorage.setItem('uniqueID', 2);
+    let ii = localStorage.getItem('uniqueID');
+    ii++;
+    localStorage.setItem('uniqueID', ii);
+    return ii;
 }
 
 const supprLaNote = () => {
@@ -111,7 +117,7 @@ const supprLaNote = () => {
             document.querySelector("#activeNote").setAttribute("contenteditable", false)
         }
     })
-}
+};
 
 const toutSuppr = () => {
     idbEcris.clear().then(() => {
@@ -119,7 +125,7 @@ const toutSuppr = () => {
         document.querySelector("#activeNote").innerHTML = '';
         document.querySelector("#activeNote").setAttribute("contenteditable", false)
     })
-}
+};
 
 const importerNotes = (e) => {
     var reader = new FileReader();
@@ -134,7 +140,7 @@ const importerNotes = (e) => {
         }
     }
     reader.readAsText(e)
-}
+};
 
 const exportNotes = () => {
     let objectForExport = {};
@@ -157,10 +163,11 @@ const exportNotes = () => {
 let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
+    '.titre':'<h3></h3>',
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     ".toutsuppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='toutSuppr()'> Supprimer toutes données. </button>",
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
-    ".dessin": "<svg class='ecrDrawboard' width='100%' height='400px' preserveAspectRatio='xMinYMin meet' onclick='SlowNoteToMem();' /><button contenteditable='false' class='btnAnnuler' onclick='document.querySelector(\".ecrDrawboard\").lastElementChild.remove();SlowNoteToMem();'>↺</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\".ecrDrawboard\"));'/> "
+    ".dessin": "<svg class='ecrDrawboard' id='drwboard-_-' width='100%' height='400px' preserveAspectRatio='xMinYMin meet' onclick='SlowNoteToMem();' /><button contenteditable='false' class='btnAnnuler' onclick='try{document.querySelector(\"#drwboard-_-\").lastElementChild.remove()}catch{};SlowNoteToMem();'>↺</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\"#drwboard-_-\"));'/> "
 }
 
 let timeout = null;
@@ -177,7 +184,7 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
         for (expr in dictReplace) {
             textAvant = textAvant.replace(expr, dictReplace[expr])
         }
-        document.getSelection().baseNode.parentElement.innerHTML = textAvant;
+        document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
         toContEditEnd(document.getSelection().baseNode);
     };
     if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
