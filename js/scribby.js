@@ -70,6 +70,7 @@ class Scribby {
         }
         this.path = null;
         this.updateModified();
+        SlowNoteToMem();
         return true;
     }
 

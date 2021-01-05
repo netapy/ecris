@@ -105,7 +105,12 @@ const uniquedivid = () => {
     ii++;
     localStorage.setItem('uniqueID', ii);
     return ii;
-}
+};
+
+const newLine = () => {
+    document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", '<div></div>');
+    toContEditEnd(document.getSelection().baseNode.parentElement.nextElementSibling);
+};
 
 const supprLaNote = () => {
     idbEcris.delete(activeNote).then((e) => {
@@ -163,11 +168,12 @@ const exportNotes = () => {
 let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     "- ": "&#8226; ",
-    '.titre':'<h3></h3>',
+    '.titre': '<h3></h3>',
+    '----': '<hr>',
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     ".toutsuppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='toutSuppr()'> Supprimer toutes données. </button>",
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
-    ".dessin": "<svg class='ecrDrawboard' id='drwboard-_-' width='100%' height='400px' preserveAspectRatio='xMinYMin meet' onclick='SlowNoteToMem();' /><button contenteditable='false' class='btnAnnuler' onclick='try{document.querySelector(\"#drwboard-_-\").lastElementChild.remove()}catch{};SlowNoteToMem();'>↺</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\"#drwboard-_-\"));'/> "
+    ".dessin": "<svg class='ecrDrawboard' id='drwboard-_-' width='100%' height='400px' preserveAspectRatio='xMinYMin meet'/><button contenteditable='false' class='btnAnnuler' onclick='try{document.querySelector(\"#drwboard-_-\").lastElementChild.remove()}catch{};SlowNoteToMem();'>↺</button><div></br></div> <img src='assets/blnk.gif' onload='var ecrDessin1 = new Scribby(document.querySelector(\"#drwboard-_-\"));'/> "
 }
 
 let timeout = null;
