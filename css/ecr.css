@@ -30,6 +30,12 @@ body {
     min-height: 60vh;
     height: 100vh;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.textZone::-webkit-scrollbar {
+    display: none;
 }
 
 @media(max-width: 767px) {
