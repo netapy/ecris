@@ -84,12 +84,12 @@ const toggleUi = () => {
         uiHidden = false;
     }
 };
-
+var quill
 const loadNote = (e) => {
     for (var i = 0; i < document.querySelectorAll('.uneFeuille').length; i++) {
         document.querySelectorAll('.uneFeuille')[i].style.color = "black";
     }
-    var quill = new Quill('#activeNote', {
+    quill = new Quill('#activeNote', {
         theme: 'bubble',
         placeholder: 'Ecris...'
     });
