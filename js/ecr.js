@@ -85,19 +85,41 @@ const toggleUi = () => {
     }
 };
 var quill
+
+var toolbarOptions = [
+    ['bold', 'italic', 'underline'],
+    ['blockquote'],
+    [{
+        'header': 1
+    }, {
+        'header': 2
+    }],
+    [{
+        'indent': '-1'
+    }, {
+        'indent': '+1'
+    }],
+    [{
+        'align': []
+    }],
+];
+
+
 const loadNote = (e) => {
     for (var i = 0; i < document.querySelectorAll('.uneFeuille').length; i++) {
         document.querySelectorAll('.uneFeuille')[i].style.color = "black";
     }
     quill = new Quill('#activeNote', {
         theme: 'bubble',
-        placeholder: 'Ecris...'
+        placeholder: 'Ecris...',
+        modules: {
+            toolbar: toolbarOptions
+        }
     });
     idbEcris.get(e.id).then((res) => {
         document.querySelector('.ql-editor').innerHTML = res;
         e.style.color = "#5770BE";
         activeNote = e.id;
-        //document.querySelector("#activeNote").setAttribute("contenteditable", true)
         //document.querySelector('#btnNvElem').style.display = 'block';
     })
 };
@@ -170,8 +192,6 @@ const exportNotes = () => {
 
 let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
-    '.titre': '<h3></h3>',
-    '----': '<hr>',
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     ".toutsuppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='toutSuppr()'> Supprimer toutes données. </button>",
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
@@ -187,17 +207,14 @@ const SlowNoteToMem = () => {
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-    // if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
-    //     let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
-    //     for (expr in dictReplace) {
-    //         textAvant = textAvant.replace(expr, dictReplace[expr])
-    //     }
-    //     document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
-    //     newLine();
-    // };
-    // if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
-    //     document.querySelector("#activeNote").innerHTML = "<div><br></div>";
-    // };
+     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
+         let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
+         for (expr in dictReplace) {
+             textAvant = textAvant.replace(expr, dictReplace[expr])
+         }
+         document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
+         newLine();
+     };
     SlowNoteToMem();
 });
 
