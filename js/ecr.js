@@ -108,8 +108,8 @@ const uniquedivid = () => {
 };
 
 const newLine = () => {
-    document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", '<div></div>');
-    toContEditEnd(document.getSelection().baseNode.parentElement.nextElementSibling);
+    document.getSelection().baseNode.insertAdjacentHTML("afterend", '<div></div>');
+    toContEditEnd(document.getSelection().baseNode.nextElementSibling);
 };
 
 const supprLaNote = () => {
@@ -167,7 +167,6 @@ const exportNotes = () => {
 
 let dictReplace = {
     "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
-    "- ": "&#8226; ",
     '.titre': '<h3></h3>',
     '----': '<hr>',
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
@@ -191,22 +190,23 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
             textAvant = textAvant.replace(expr, dictReplace[expr])
         }
         document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
-        toContEditEnd(document.getSelection().baseNode);
+        newLine();
     };
     if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
         document.querySelector("#activeNote").innerHTML = "<div><br></div>";
-    }
+    };
     SlowNoteToMem();
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
-    //if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
-    if (["•", "-"].includes(document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0]) && event.keyCode == 13) {
+    //TABKEY if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
+    let currentWr = document.getSelection().baseNode.parentElement.innerHTML
+    document.getSelection().baseNode.parentElement.innerHTML = currentWr.replaceAll("-->","&#129058;").replaceAll('=>','&#8658;')
+    if (["•", "-", "&gt;"].includes(currentWr.split(' ')[0]) && event.keyCode == 13) {
         event.preventDefault();
-        document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + document.getSelection().baseNode.parentElement.innerHTML.split(' ')[0] + "&nbsp;</div>");
+        document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + currentWr.split(' ')[0] + "&nbsp;</div>");
         toContEditEnd(document.getSelection().baseNode.parentElement.nextSibling);
     }
-
     SlowNoteToMem();
 });
 
