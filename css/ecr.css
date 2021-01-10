@@ -116,24 +116,6 @@ body {
 
 /** Styling des modules de traitement de texte **/
 
-#activeNote>div {
-    line-height: normal;
-    margin-bottom: 6px;
-    padding: 5px;
-    transition: all .2s cubic-bezier(.25, .8, .25, 1);
-    position: relative;
-    display: block;
-}
-
-#activeNote>div:hover {
-    background-color: #f8f8f8af;
-    border-radius: 5px;
-}
-
-#activeNote>div>img {
-    max-width: 100%;
-    max-height: 100%;
-}
 
 .tabSpace {
     padding: 10px;

@@ -30,7 +30,7 @@ let uiHidden = false;
 let activeNote;
 let lastAction;
 
-const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector("#activeNote").innerHTML);
+const NoteToMemory = () => idbEcris.set(activeNote, document.querySelector(".ql-editor").innerHTML);
 
 function download(filename, text) {
     var element = document.createElement('a');
@@ -89,13 +89,16 @@ const loadNote = (e) => {
     for (var i = 0; i < document.querySelectorAll('.uneFeuille').length; i++) {
         document.querySelectorAll('.uneFeuille')[i].style.color = "black";
     }
+    var quill = new Quill('#activeNote', {
+        theme: 'bubble',
+        placeholder: 'Ecris...'
+    });
     idbEcris.get(e.id).then((res) => {
-        document.querySelector('#activeNote').innerHTML = res;
+        document.querySelector('.ql-editor').innerHTML = res;
         e.style.color = "#5770BE";
         activeNote = e.id;
-        document.querySelector("#activeNote").setAttribute("contenteditable", true)
+        //document.querySelector("#activeNote").setAttribute("contenteditable", true)
         //document.querySelector('#btnNvElem').style.display = 'block';
-        toContEditEnd(document.querySelector("#activeNote").querySelector('div'));
     })
 };
 
@@ -184,29 +187,29 @@ const SlowNoteToMem = () => {
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-    if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
-        let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
-        for (expr in dictReplace) {
-            textAvant = textAvant.replace(expr, dictReplace[expr])
-        }
-        document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
-        newLine();
-    };
-    if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
-        document.querySelector("#activeNote").innerHTML = "<div><br></div>";
-    };
+    // if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
+    //     let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
+    //     for (expr in dictReplace) {
+    //         textAvant = textAvant.replace(expr, dictReplace[expr])
+    //     }
+    //     document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
+    //     newLine();
+    // };
+    // if ([0, 4].includes(document.querySelector("#activeNote").innerHTML.length)) {
+    //     document.querySelector("#activeNote").innerHTML = "<div><br></div>";
+    // };
     SlowNoteToMem();
 });
 
 document.querySelector("#activeNote").addEventListener('keydown', event => {
     //TABKEY if (event.keyCode == 9) document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterbegin", "<span class='tabSpace'></span>")
-    let currentWr = document.getSelection().baseNode.parentElement.innerHTML
-    document.getSelection().baseNode.parentElement.innerHTML = currentWr.replaceAll("-->","&#129058;").replaceAll('=>','&#8658;')
-    if (["•", "-", "&gt;"].includes(currentWr.split(' ')[0]) && event.keyCode == 13) {
-        event.preventDefault();
-        document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + currentWr.split(' ')[0] + "&nbsp;</div>");
-        toContEditEnd(document.getSelection().baseNode.parentElement.nextSibling);
-    }
+    // let currentWr = document.getSelection().baseNode.parentElement.innerHTML
+    // document.getSelection().baseNode.parentElement.innerHTML = currentWr.replaceAll("-->", "&#129058;").replaceAll('=>', '&#8658;')
+    // if (["•", "-", "&gt;"].includes(currentWr.split(' ')[0]) && event.keyCode == 13) {
+    //     event.preventDefault();
+    //     document.getSelection().baseNode.parentElement.insertAdjacentHTML("afterend", "<div>" + currentWr.split(' ')[0] + "&nbsp;</div>");
+    //     toContEditEnd(document.getSelection().baseNode.parentElement.nextSibling);
+    // }
     SlowNoteToMem();
 });
 
@@ -233,7 +236,7 @@ document.querySelector("#newNote").addEventListener('keyup', event => {
                     }
                 });
         } else {
-            idbEcris.set(valeurNouvelleNote, '<div><br></div>').then(e => {
+            idbEcris.set(valeurNouvelleNote, "<div><br></div>").then(e => {
                 (async () => {
                     await updateLists();
                     loadNote(document.getElementById(valeurNouvelleNote));
