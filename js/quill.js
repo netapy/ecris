@@ -4315,7 +4315,7 @@
                     value: function (t) {
                         var e = t.left + t.width / 2 - this.root.offsetWidth / 2,
                             n = t.bottom + this.quill.root.scrollTop;
-                        this.root.style.left = e + "px", this.root.style.top = n + "px", this.root.classList.remove("ql-flip");
+                        this.root.style.left = "0", this.root.style.top = n + "px", this.root.classList.remove("ql-flip");
                         var r = this.boundsContainer.getBoundingClientRect(),
                             o = this.root.getBoundingClientRect(),
                             i = 0;
