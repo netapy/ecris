@@ -1,5 +1,5 @@
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
+    navigator.serviceWorker.register("sw.js");
 }
 
 const dbPromise = idb.openDB('ecris-store', 1, {
