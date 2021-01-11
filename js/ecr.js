@@ -1,5 +1,7 @@
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register("sw.js");
+    });
 }
 
 const dbPromise = idb.openDB('ecris-store', 1, {
@@ -207,14 +209,14 @@ const SlowNoteToMem = () => {
 }
 
 document.querySelector("#activeNote").addEventListener('keyup', event => {
-     if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
-         let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
-         for (expr in dictReplace) {
-             textAvant = textAvant.replace(expr, dictReplace[expr])
-         }
-         document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
-         //newLine();
-     };
+    if (Object.keys(dictReplace).some(v => String(document.getSelection().baseNode.textContent).includes(v))) {
+        let textAvant = String(document.getSelection().baseNode.parentElement.innerHTML)
+        for (expr in dictReplace) {
+            textAvant = textAvant.replace(expr, dictReplace[expr])
+        }
+        document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
+        //newLine();
+    };
     SlowNoteToMem();
 });
 
