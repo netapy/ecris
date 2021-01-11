@@ -191,7 +191,7 @@ const exportNotes = () => {
 };
 
 let dictReplace = {
-    "[]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
+    "[xx]": "<input type='checkbox' class='ecrCheckbox' onchange='ectCheckbox(this)'>",
     ".suppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='supprLaNote()'> Supprimer la note. </button>",
     ".toutsuppr": "<button class='btnSuppr drag-box' contenteditable='false' onclick='toutSuppr()'> Supprimer toutes données. </button>",
     ".tableau": "<div style='position:relative; width:fit-content;'><table class='tableEcr'><tr contenteditable='true'><th>Lastname</th><th>Age</th></tr><tr contenteditable='true'><td>Wayne</td><td>50</td></tr><tr contenteditable='true'><td>Jackson</td><td>94</td></tr></table><div class='newColRowbtn' contenteditable='false' onclick='newRow(this)' style='top:0px;right:-25px;'>+</div><div class='newColRowbtn' contenteditable='false' onclick='newCol(this)' style='left:0px;bottom:-25px;'>+</div></div><div><br></div>",
@@ -213,7 +213,7 @@ document.querySelector("#activeNote").addEventListener('keyup', event => {
              textAvant = textAvant.replace(expr, dictReplace[expr])
          }
          document.getSelection().baseNode.parentElement.innerHTML = textAvant.replaceAll("-_-", uniquedivid());
-         newLine();
+         //newLine();
      };
     SlowNoteToMem();
 });
