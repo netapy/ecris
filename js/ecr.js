@@ -86,7 +86,7 @@ const toggleUi = () => {
         uiHidden = false;
     }
 };
-var quill
+var quill;
 
 var toolbarOptions = [
     ['bold', 'italic', 'underline'],
@@ -122,6 +122,9 @@ const loadNote = (e) => {
         document.querySelector('.ql-editor').innerHTML = res;
         e.style.color = "#5770BE";
         activeNote = e.id;
+        quill.on('text-change', () => {
+            SlowNoteToMem();
+        });
         //document.querySelector('#btnNvElem').style.display = 'block';
     })
 };
