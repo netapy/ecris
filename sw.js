@@ -2,7 +2,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.0.2/workbox
 
 workbox.routing.registerRoute(({
     request: e
-}) => "navigate" === e.mode, new workbox.strategies.StaleWhileRevalidate({
+}) => "navigate" === e.mode, new workbox.strategies.NetworkFirst({
     cacheName: "pages",
     plugins: [new workbox.cacheableResponse.CacheableResponsePlugin({
         statuses: [200]
