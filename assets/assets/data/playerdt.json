@@ -1,0 +1,22 @@
+[{
+    "couleur": "0xFFE91E63",
+    "createur": "xXAurel",
+    "imgCrea": "assets/images/giraffe.jpg",
+    "jeu": "Voici le jeu numéro 1",
+    "save": true
+  },
+  {
+    "couleur": "0xFF2196F3",
+    "createur": "Louis_AR",
+    "imgCrea": "assets/images/panda.jpg",
+    "jeu": "hihiVoici le jeu numéro 2",
+    "save": false
+  },
+  {
+    "couleur": "0xFFE91E63",
+    "createur": "UnCreateur022",
+    "imgCrea": "assets/images/pingouins.jpg",
+    "jeu": "ZRIZNRIZNRI afeaga",
+    "save": false
+  }
+]

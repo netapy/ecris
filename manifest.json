@@ -1,20 +1,23 @@
 {
-    "name": "Ecris",
-    "short_name": "Ecris",
-    "start_url": "index.html",
-    "scope": "./",
-    "icons": [{
-            "src": "assets/logo192.png",
+    "name": "banquise",
+    "short_name": "banquise",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "A new Flutter project.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "assets/logo512.png",
+            "src": "icons/Icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
-    ],
-    "theme_color": "#5770BE",
-    "background_color": "#FDFDFD",
-    "display": "standalone"
+    ]
 }
