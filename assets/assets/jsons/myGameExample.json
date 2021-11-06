@@ -1,0 +1,25 @@
+{
+    "title": null,
+    "description": null,
+    "score": null,
+    "scoreName": null,
+    "textCommand": null,
+    "musics": null,
+    "sounds": null,
+    "winConditions": null,
+    "background": {
+      "image": "anim1/Scan0015.png"
+    },
+    "titleScreen": {
+      "image": "panda.png"
+    },
+    "gameOverScreen": {
+      "image": "pingouins.jpg"
+    },
+    "winScreen": null,
+    "time": null,
+    "won": false,
+    "objects": null,
+    "zones": null
+  }
+  
